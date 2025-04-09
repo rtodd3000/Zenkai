@@ -5,15 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
     path: Assets/MainMenu/Main Menu.unity
     guid: 5fca9556ea9f7f144b2697707925e516
   - enabled: 1
     path: Assets/demo pt 2 .unity
     guid: c368e1e5a46304eb29815519613065de
+  - enabled: 0
+    path: Assets/[] City Assets/Mellow Fox studios/Versatile Building Kit - 15 Medium
+      Poly Models for Game Development/Demo/Overview.unity
+    guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 0
     path: Assets/Demo.unity
     guid: adab1a0b61f3b47d1a4c959a67e152ff
