@@ -701,7 +701,7 @@ GameObject:
   - component: {fileID: 192937570}
   - component: {fileID: 192937569}
   - component: {fileID: 192937568}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: BillBoardPost1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1173,6 +1173,78 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 539243641}
   m_CullTransparentMesh: 1
+--- !u!1001 &543184506
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 82b1bb9f670c4c843ad4987c51413e16, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 3438.51
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 82b1bb9f670c4c843ad4987c51413e16, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 171.9255
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 82b1bb9f670c4c843ad4987c51413e16, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 3438.51
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 82b1bb9f670c4c843ad4987c51413e16, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 558.9796
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 82b1bb9f670c4c843ad4987c51413e16, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 22.32
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 82b1bb9f670c4c843ad4987c51413e16, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 343.68
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 82b1bb9f670c4c843ad4987c51413e16, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 82b1bb9f670c4c843ad4987c51413e16, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 82b1bb9f670c4c843ad4987c51413e16, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 82b1bb9f670c4c843ad4987c51413e16, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 82b1bb9f670c4c843ad4987c51413e16, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 82b1bb9f670c4c843ad4987c51413e16, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 82b1bb9f670c4c843ad4987c51413e16, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 82b1bb9f670c4c843ad4987c51413e16, type: 3}
+      propertyPath: m_Name
+      value: Mountwintow
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 82b1bb9f670c4c843ad4987c51413e16, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1303973397}
+  m_SourcePrefab: {fileID: 100100000, guid: 82b1bb9f670c4c843ad4987c51413e16, type: 3}
 --- !u!1 &546013763
 GameObject:
   m_ObjectHideFlags: 0
@@ -1621,7 +1693,7 @@ GameObject:
   - component: {fileID: 607658201}
   - component: {fileID: 607658200}
   - component: {fileID: 607658199}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: BillBoardPost2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2739,7 +2811,7 @@ GameObject:
   - component: {fileID: 965622113}
   - component: {fileID: 965622112}
   - component: {fileID: 965622111}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: BillBoardPost1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3070,6 +3142,33 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 6606501483488557099, guid: e92dcac5cd6040f4d8a5568a6b0193a6, type: 3}
+--- !u!1 &1303973396 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 82b1bb9f670c4c843ad4987c51413e16, type: 3}
+  m_PrefabInstance: {fileID: 543184506}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &1303973397
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1303973396}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 9032159042231070440, guid: 82b1bb9f670c4c843ad4987c51413e16, type: 3}
 --- !u!1 &1330308694
 GameObject:
   m_ObjectHideFlags: 0
@@ -3668,7 +3767,7 @@ GameObject:
   - component: {fileID: 1528061882}
   - component: {fileID: 1528061881}
   - component: {fileID: 1528061880}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: BillBoardPost2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4779,3 +4878,4 @@ SceneRoots:
   - {fileID: 610618163}
   - {fileID: 1913716219}
   - {fileID: 700421520}
+  - {fileID: 543184506}
