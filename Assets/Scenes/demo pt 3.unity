@@ -1028,6 +1028,11 @@ Transform:
   - {fileID: 1722128411}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &501138661 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 251841963960890265, guid: c708a3b79cd542b42bbfedb17e213bc1, type: 3}
+  m_PrefabInstance: {fileID: 586786525}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &539243641
 GameObject:
   m_ObjectHideFlags: 0
@@ -1237,6 +1242,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mountwintow
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 82b1bb9f670c4c843ad4987c51413e16, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1381,6 +1390,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 546013763}
   m_CullTransparentMesh: 1
+--- !u!4 &554375921 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5743254503447423938, guid: c708a3b79cd542b42bbfedb17e213bc1, type: 3}
+  m_PrefabInstance: {fileID: 586786525}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &556748138
 GameObject:
   m_ObjectHideFlags: 0
@@ -1652,6 +1666,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 974238578668270704, guid: c708a3b79cd542b42bbfedb17e213bc1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1395887613}
+    - targetCorrespondingSourceObject: {fileID: 974238578668270704, guid: c708a3b79cd542b42bbfedb17e213bc1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1395887614}
   m_SourcePrefab: {fileID: 100100000, guid: c708a3b79cd542b42bbfedb17e213bc1, type: 3}
 --- !u!1 &597260293 stripped
 GameObject:
@@ -1871,6 +1888,11 @@ Transform:
   - {fileID: 192937567}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &786665004 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2109608576910113976, guid: c708a3b79cd542b42bbfedb17e213bc1, type: 3}
+  m_PrefabInstance: {fileID: 586786525}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &787253588
 GameObject:
   m_ObjectHideFlags: 0
@@ -3425,6 +3447,34 @@ MonoBehaviour:
     m_Bits: 8
   _interactionPromptUI: {fileID: 1491031973}
   _numFound: 0
+--- !u!114 &1395887614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1395887605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2164788457efc4c608aa0d8c601bffa3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 1395887620}
+  leftHandTarget: {fileID: 554375921}
+  rightHandTarget: {fileID: 1634178924}
+  leftFootTarget: {fileID: 786665004}
+  rightFootTarget: {fileID: 501138661}
+  climbSpeed: 1
+  detectionDistance: 5
+  climbableLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  useTopDetection: 0
+--- !u!95 &1395887620 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5777780407979046064, guid: c708a3b79cd542b42bbfedb17e213bc1, type: 3}
+  m_PrefabInstance: {fileID: 586786525}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1491031968
 GameObject:
   m_ObjectHideFlags: 0
@@ -3876,6 +3926,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1528061878}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1634178924 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5151736696236005906, guid: c708a3b79cd542b42bbfedb17e213bc1, type: 3}
+  m_PrefabInstance: {fileID: 586786525}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1654931969
 GameObject:
   m_ObjectHideFlags: 0
