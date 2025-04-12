@@ -15,7 +15,7 @@ public class InteractableSign : MonoBehaviour, IInteractable
         UIManager uiManager = FindObjectOfType<UIManager>();
         if (uiManager != null)
         {
-            uiManager.ShowMessage("Welcome to Zenkai! Explore the World and find all 7 Wisps!");
+            uiManager.ShowMessage("Welcome to Zenkai! Explore this area and find all 7 Wisps!");
         }
         else
         {

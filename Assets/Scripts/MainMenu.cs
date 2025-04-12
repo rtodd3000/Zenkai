@@ -7,10 +7,16 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    //Load Scene
+    //Load Play Scene
     public void Play()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene(1);
+    }
+
+    //Load Tutorial Scene
+    public void Tutorial()
+    {
+        SceneManager.LoadScene(2);
     }
 
     // Figure out Options
