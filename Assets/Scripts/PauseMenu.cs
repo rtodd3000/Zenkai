@@ -37,7 +37,7 @@ public class PauseMenu : MonoBehaviour
         PauseMenuCanvas.SetActive(true);
         Time.timeScale = 0f;
         paused = true;
-        // Cursor.visible = true;
+        Cursor.visible = true;
     }
 
     public void Play()
@@ -45,7 +45,7 @@ public class PauseMenu : MonoBehaviour
         PauseMenuCanvas.SetActive(false);
         Time.timeScale = 1f;
         paused = false;
-        // Cursor.visible = false;
+        Cursor.visible = false;
     }
 
     public void MainMenuButton()
