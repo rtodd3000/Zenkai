@@ -6,6 +6,11 @@ using UnityEngine;
 public class InteractableWisp : MonoBehaviour, IInteractable
 {
     [SerializeField] private string _prompt;
+
+    // This message will be shown when collecting wisps in normal gameplay scenes
+    [TextArea(2, 4)]
+    [SerializeField] private string _collectMessage = "You got a Wisp!";
+
     // Static variable to track the total number of collected wisps.
     private static int wispCount = 0;
 
@@ -17,40 +22,53 @@ public class InteractableWisp : MonoBehaviour, IInteractable
         Destroy(gameObject);
         Debug.Log("Get Wisp!");
 
-        // Checks if scene is in the Main Game Index
+        // Find the UIManager in the scene
+        UIManager uiManager = FindObjectOfType<UIManager>();
+
+        // Checks if scene is in the Main Game Index (non-tutorial gameplay)
         if (SceneManager.GetActiveScene().buildIndex == 1)
         {
+            // stuff here for inventory collection system
+            //
+            //
+            //
+            //
+
+            if (uiManager != null)
+            {
+                uiManager.ShowMessage(_collectMessage);
+            }
+            else
+            {
+                Debug.LogWarning("UIManager not found in the scene.");
+            }
+
             Debug.Log("In Non-Tutorial Index");
+            // will add more stuff here relating to the inventory
         }
 
-
-        // Checks if the scene is the Tutorial / Demo Index to run this script
+        // Checks if the scene is the Tutorial / Demo Index
         if (SceneManager.GetActiveScene().buildIndex == 2)
         {
             // Increase the global count of collected wisps.
             wispCount++;
 
-            // Find the UIManager in the scene and display the corresponding message.
-            UIManager uiManager = FindObjectOfType<UIManager>();
             if (uiManager != null)
             {
                 if (wispCount == 7)
                 {
-                    // If exactly 7 wisps have been collected, show a special message.
                     uiManager.ShowMessage("You collected 7 wisps! Demo is Complete, Feel Free to Explore");
                 }
                 else
                 {
-                    // Otherwise, show the normal message with the current count.
                     uiManager.ShowMessage("You got a wisp! Total wisps: " + wispCount);
                 }
             }
             else
             {
-            Debug.LogWarning("UIManager not found in the scene.");
+                Debug.LogWarning("UIManager not found in the scene.");
             }
         }
-
 
         return true;
     }

@@ -317,6 +317,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prompt: Collect Wisp
+  _completeMessage: You collected 7 wisps! Demo is Complete, Feel Free to Explore
+  _pickupMessagePrefix: 'You got a wisp! Total wisps: '
 --- !u!199 &30181361
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -7223,6 +7225,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prompt: Collect Wisp
+  _completeMessage: You collected 7 wisps! Demo is Complete, Feel Free to Explore
+  _pickupMessagePrefix: 'You got a wisp! Total wisps: '
 --- !u!199 &302378473
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -14221,6 +14225,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prompt: Collect Wisp
+  _completeMessage: You collected 7 wisps! Demo is Complete, Feel Free to Explore
+  _pickupMessagePrefix: 'You got a wisp! Total wisps: '
 --- !u!199 &565468146
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -20503,6 +20509,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prompt: 
+  _messageText: 
 --- !u!65 &719473342
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -23140,6 +23147,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prompt: Collect Wisp
+  _completeMessage: You collected 7 wisps! Demo is Complete, Feel Free to Explore
+  _pickupMessagePrefix: 'You got a wisp! Total wisps: '
 --- !u!199 &1074063196
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -28546,6 +28555,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prompt: Read Sign
+  _messageText: Welcome to Zenkai! Explore this area and find all 7 Wisps!
 --- !u!65 &1170063060
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -31323,6 +31333,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prompt: 
+  _messageText: 
 --- !u!65 &1521688867
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -31502,6 +31513,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prompt: Collect Wisp
+  _completeMessage: You collected 7 wisps! Demo is Complete, Feel Free to Explore
+  _pickupMessagePrefix: 'You got a wisp! Total wisps: '
 --- !u!199 &1531065884
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -37623,6 +37636,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prompt: Collect Wisp
+  _completeMessage: You collected 7 wisps! Demo is Complete, Feel Free to Explore
+  _pickupMessagePrefix: 'You got a wisp! Total wisps: '
 --- !u!199 &1712689748
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -44070,6 +44085,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prompt: Collect Wisp
+  _completeMessage: You collected 7 wisps! Demo is Complete, Feel Free to Explore
+  _pickupMessagePrefix: 'You got a wisp! Total wisps: '
 --- !u!199 &1960959417
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -49959,6 +49976,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prompt: 
+  _messageText: 
 --- !u!65 &2117353903
 BoxCollider:
   m_ObjectHideFlags: 0

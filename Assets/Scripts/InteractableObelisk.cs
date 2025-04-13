@@ -7,12 +7,29 @@ public class InteractableObelisk : MonoBehaviour, IInteractable
 {
     [SerializeField] private string _prompt;
 
+    [TextArea(3, 5)]
+    [SerializeField] private string _messageText; // The full sign message shown via UIManager
+
     public string InteractionPrompt => _prompt;
 
-    // Change this for different interactable object
-    public bool Interact(Interactor interactor)
+public bool Interact(Interactor interactor)
     {
-        Debug.Log(message: "Reading Obelisk!");
+        // debug tool for testing
+        Debug.Log("Reading Obelisk!");
+
+        // Find the UIManager in the scene and display the corresponding message.
+        UIManager uiManager = FindObjectOfType<UIManager>();
+        if (uiManager != null)
+        {
+            // a prompt in the gameobject to easily test
+            uiManager.ShowMessage(_messageText);
+        }
+        else
+        {
+            // debug tool for testing
+            Debug.LogWarning("UIManager not found in the scene.");
+        }
+
         return true;
     }
 }
