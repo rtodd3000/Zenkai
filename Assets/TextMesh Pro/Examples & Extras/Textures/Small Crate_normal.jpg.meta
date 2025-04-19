@@ -1,14 +1,37 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
+<<<<<<<< HEAD:Assets/TextMesh Pro/Examples & Extras/Textures/Small Crate_normal.jpg.meta
+guid: 8878a782f4334ecbbcf683b3ac780966
+========
+guid: e64e47d87a03772439edc8ba551f357b
+>>>>>>>> temp-main-game:Assets/[] Forest Assets/HQP STUDIOS/Low Poly Dungeons - Pack/Textures/ColorGrid.png.meta
+TextureImporter:
+  fileIDToRecycleName: {}
+  externalObjects: {}
+<<<<<<<< HEAD:Assets/TextMesh Pro/Examples & Extras/Textures/Small Crate_normal.jpg.meta
+=======
 guid: 8878a782f4334ecbbcf683b3ac780966
 TextureImporter:
   fileIDToRecycleName: {}
   externalObjects: {}
+>>>>>>> temp-main-game
   serializedVersion: 7
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
     sRGBTexture: 0
     linearTexture: 1
+<<<<<<< HEAD
+========
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    sRGBTexture: 1
+    linearTexture: 0
+>>>>>>>> temp-main-game:Assets/[] Forest Assets/HQP STUDIOS/Low Poly Dungeons - Pack/Textures/ColorGrid.png.meta
+=======
+>>>>>>> temp-main-game
     fadeOut: 0
     borderMipMap: 0
     mipMapsPreserveCoverage: 0
@@ -23,12 +46,30 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+<<<<<<< HEAD
+<<<<<<<< HEAD:Assets/TextMesh Pro/Examples & Extras/Textures/Small Crate_normal.jpg.meta
+========
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+>>>>>>>> temp-main-game:Assets/[] Forest Assets/HQP STUDIOS/Low Poly Dungeons - Pack/Textures/ColorGrid.png.meta
+=======
+>>>>>>> temp-main-game
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
   seamlessCubemap: 0
+<<<<<<< HEAD
+<<<<<<<< HEAD:Assets/TextMesh Pro/Examples & Extras/Textures/Small Crate_normal.jpg.meta
   textureFormat: -1
   maxTextureSize: 512
+========
+  textureFormat: 1
+  maxTextureSize: 2048
+>>>>>>>> temp-main-game:Assets/[] Forest Assets/HQP STUDIOS/Low Poly Dungeons - Pack/Textures/ColorGrid.png.meta
+=======
+  textureFormat: -1
+  maxTextureSize: 512
+>>>>>>> temp-main-game
   textureSettings:
     serializedVersion: 2
     filterMode: -1
@@ -57,10 +98,25 @@ TextureImporter:
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+<<<<<<< HEAD
+<<<<<<<< HEAD:Assets/TextMesh Pro/Examples & Extras/Textures/Small Crate_normal.jpg.meta
+=======
+>>>>>>> temp-main-game
   platformSettings:
   - serializedVersion: 2
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 512
+<<<<<<< HEAD
+========
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+>>>>>>>> temp-main-game:Assets/[] Forest Assets/HQP STUDIOS/Low Poly Dungeons - Pack/Textures/ColorGrid.png.meta
+=======
+>>>>>>> temp-main-game
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -68,6 +124,10 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+<<<<<<< HEAD
+<<<<<<<< HEAD:Assets/TextMesh Pro/Examples & Extras/Textures/Small Crate_normal.jpg.meta
+=======
+>>>>>>> temp-main-game
     androidETC2FallbackOverride: 0
   - serializedVersion: 2
     buildTarget: Standalone
@@ -112,6 +172,11 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+<<<<<<< HEAD
+========
+>>>>>>>> temp-main-game:Assets/[] Forest Assets/HQP STUDIOS/Low Poly Dungeons - Pack/Textures/ColorGrid.png.meta
+=======
+>>>>>>> temp-main-game
     androidETC2FallbackOverride: 0
   spriteSheet:
     serializedVersion: 2
@@ -124,9 +189,30 @@ TextureImporter:
     indices: 
     edges: []
     weights: []
+<<<<<<< HEAD
+<<<<<<<< HEAD:Assets/TextMesh Pro/Examples & Extras/Textures/Small Crate_normal.jpg.meta
+========
+    secondaryTextures: []
+    nameFileIdTable: {}
+>>>>>>>> temp-main-game:Assets/[] Forest Assets/HQP STUDIOS/Low Poly Dungeons - Pack/Textures/ColorGrid.png.meta
+=======
+>>>>>>> temp-main-game
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+<<<<<<< HEAD
+<<<<<<<< HEAD:Assets/TextMesh Pro/Examples & Extras/Textures/Small Crate_normal.jpg.meta
+========
+AssetOrigin:
+  serializedVersion: 1
+  productId: 273736
+  packageName: Low Poly Dungeons - Pack
+  packageVersion: 1.0
+  assetPath: Assets/HQP STUDIOS/Low Poly Dungeons - Pack/Textures/ColorGrid.png
+  uploadId: 655761
+>>>>>>>> temp-main-game:Assets/[] Forest Assets/HQP STUDIOS/Low Poly Dungeons - Pack/Textures/ColorGrid.png.meta
+=======
+>>>>>>> temp-main-game

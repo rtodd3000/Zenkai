@@ -1,5 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: f54d1bd14bd3ca042bd867b519fee8cc
+=======
+<<<<<<<< HEAD:Assets/Character.meta
+guid: 81e91e694e8ac451f85e975390237d9d
+========
+guid: f54d1bd14bd3ca042bd867b519fee8cc
+>>>>>>>> temp-main-game:Assets/TextMesh Pro.meta
+>>>>>>> temp-main-game
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

@@ -1,5 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
+<<<<<<<< HEAD:Assets/TextMesh Pro/Examples & Extras/Materials.meta
 guid: 5808953df7a24274a851aa6dee52d30e
+========
+guid: ea86ea362c4505e41be8df72f6981f3b
+>>>>>>>> temp-main-game:Assets/Materials.meta
+=======
+guid: 5808953df7a24274a851aa6dee52d30e
+>>>>>>> temp-main-game
 folderAsset: yes
 timeCreated: 1436068007
 licenseType: Pro

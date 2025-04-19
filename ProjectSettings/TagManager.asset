@@ -9,11 +9,15 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
+<<<<<<< HEAD
   - Climbable
+=======
+  - Interactable
+>>>>>>> temp-main-game
   - Water
   - UI
-  - 
-  - 
+  - Climbable
+  - Rooftop
   - 
   - 
   - 
