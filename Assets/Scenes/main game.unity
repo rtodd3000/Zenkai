@@ -15193,6 +15193,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PauseMenuCanvas: {fileID: 1022855519}
+  followCameraGO: {fileID: 2103917581}
 --- !u!4 &892701820
 Transform:
   m_ObjectHideFlags: 0
@@ -37278,6 +37279,11 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 7090259603639657843, guid: 34b717d9d4a64994dbf2738d1f0852de, type: 3}
   m_PrefabInstance: {fileID: 641471999}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2103917581 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3203261902030645159, guid: c708a3b79cd542b42bbfedb17e213bc1, type: 3}
+  m_PrefabInstance: {fileID: 586786525}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &2116166736
 GameObject:

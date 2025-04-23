@@ -10,6 +10,9 @@ public class PauseMenu : MonoBehaviour
     public static bool paused = false;
     public GameObject PauseMenuCanvas;
 
+    // Drag your Cinemachine Virtual Camera GameObject here
+    public GameObject followCameraGO;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,10 +26,12 @@ public class PauseMenu : MonoBehaviour
         {
             if (paused)
             {
+                Cursor.visible = false;
                 Play();
             }
             else
             {
+                Cursor.visible = true;
                 Stop();
             }
         }
@@ -38,6 +43,9 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 0f;
         paused = true;
         Cursor.visible = true;
+        // DISABLE the virtual camera
+        if (followCameraGO != null)
+            followCameraGO.SetActive(false);
     }
 
     public void Play()
@@ -46,6 +54,9 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1f;
         paused = false;
         Cursor.visible = false;
+        // RE-ENABLE the virtual camera
+        if (followCameraGO != null)
+            followCameraGO.SetActive(true);
     }
 
     public void MainMenuButton()

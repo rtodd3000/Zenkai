@@ -317,8 +317,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prompt: Collect Wisp
-  _completeMessage: You collected 7 wisps! Demo is Complete, Feel Free to Explore
-  _pickupMessagePrefix: 'You got a wisp! Total wisps: '
+  _collectMessage: You got a Wisp!
 --- !u!199 &30181361
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -7225,8 +7224,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prompt: Collect Wisp
-  _completeMessage: You collected 7 wisps! Demo is Complete, Feel Free to Explore
-  _pickupMessagePrefix: 'You got a wisp! Total wisps: '
+  _collectMessage: You got a Wisp!
 --- !u!199 &302378473
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -14225,8 +14223,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prompt: Collect Wisp
-  _completeMessage: You collected 7 wisps! Demo is Complete, Feel Free to Explore
-  _pickupMessagePrefix: 'You got a wisp! Total wisps: '
+  _collectMessage: You got a Wisp!
 --- !u!199 &565468146
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -19225,6 +19222,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1395887614}
   m_SourcePrefab: {fileID: 100100000, guid: c708a3b79cd542b42bbfedb17e213bc1, type: 3}
+--- !u!1 &586786526 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3203261902030645159, guid: c708a3b79cd542b42bbfedb17e213bc1, type: 3}
+  m_PrefabInstance: {fileID: 586786525}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &595545139 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: da67e49d93acf1a47884b968ff50edb5, type: 3}
@@ -21564,6 +21566,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PauseMenuCanvas: {fileID: 1022855519}
+  followCameraGO: {fileID: 586786526}
 --- !u!4 &892701820
 Transform:
   m_ObjectHideFlags: 0
@@ -23147,8 +23150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prompt: Collect Wisp
-  _completeMessage: You collected 7 wisps! Demo is Complete, Feel Free to Explore
-  _pickupMessagePrefix: 'You got a wisp! Total wisps: '
+  _collectMessage: You got a Wisp!
 --- !u!199 &1074063196
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -31513,8 +31515,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prompt: Collect Wisp
-  _completeMessage: You collected 7 wisps! Demo is Complete, Feel Free to Explore
-  _pickupMessagePrefix: 'You got a wisp! Total wisps: '
+  _collectMessage: You got a Wisp!
 --- !u!199 &1531065884
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -37636,8 +37637,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prompt: Collect Wisp
-  _completeMessage: You collected 7 wisps! Demo is Complete, Feel Free to Explore
-  _pickupMessagePrefix: 'You got a wisp! Total wisps: '
+  _collectMessage: You got a Wisp!
 --- !u!199 &1712689748
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -44085,8 +44085,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prompt: Collect Wisp
-  _completeMessage: You collected 7 wisps! Demo is Complete, Feel Free to Explore
-  _pickupMessagePrefix: 'You got a wisp! Total wisps: '
+  _collectMessage: You got a Wisp!
 --- !u!199 &1960959417
 ParticleSystemRenderer:
   serializedVersion: 6
