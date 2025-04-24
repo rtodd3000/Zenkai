@@ -1,7 +1,3 @@
-// by GarrettDeveloper on YT
-
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,54 +5,60 @@ public class PauseMenu : MonoBehaviour
 {
     public static bool paused = false;
     public GameObject PauseMenuCanvas;
-
-    // Drag your Cinemachine Virtual Camera GameObject here
     public GameObject followCameraGO;
 
-    // Start is called before the first frame update
     void Start()
     {
         Time.timeScale = 1f;
+        paused = false;
+        Cursor.visible = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (paused)
-            {
-                Cursor.visible = false;
-                Play();
-            }
-            else
-            {
-                Cursor.visible = true;
-                Stop();
-            }
+            if (paused) Play();
+            else         Stop();
         }
     }
 
-    void Stop()
+    // Fully enter pause state
+    private void Stop()
     {
-        PauseMenuCanvas.SetActive(true);
-        Time.timeScale = 0f;
         paused = true;
+        Time.timeScale = 0f;
         Cursor.visible = true;
-        // DISABLE the virtual camera
-        if (followCameraGO != null)
-            followCameraGO.SetActive(false);
+
+        PauseMenuCanvas.SetActive(true);
+        if (followCameraGO != null) followCameraGO.SetActive(false);
+
+        // If inventory is open, hide it (UI-only)
+        var inv = FindObjectOfType<InventoryManager>();
+        if (inv != null) inv.HideUIOnly();
     }
 
+    // Fully exit pause state
     public void Play()
     {
+        paused = false;
         PauseMenuCanvas.SetActive(false);
         Time.timeScale = 1f;
-        paused = false;
         Cursor.visible = false;
-        // RE-ENABLE the virtual camera
-        if (followCameraGO != null)
-            followCameraGO.SetActive(true);
+
+        if (followCameraGO != null) followCameraGO.SetActive(true);
+    }
+
+    // Just hide the pause UI without changing timeScale or paused flag
+    public void HideUIOnly()
+    {
+        PauseMenuCanvas.SetActive(false);
+    }
+
+    // Just show the pause UI without changing timeScale or paused flag
+    public void ShowUIOnly()
+    {
+        PauseMenuCanvas.SetActive(true);
     }
 
     public void MainMenuButton()

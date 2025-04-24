@@ -1,0 +1,61 @@
+using UnityEngine;
+
+public class InventoryManager : MonoBehaviour
+{
+    public GameObject InventoryMenu;
+    public GameObject followCameraGO;
+
+    private bool menuActivated = false;
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            if (menuActivated) CloseInventory();
+            else             OpenInventory();
+        }
+    }
+
+    // Fully open inventory (pause the game)
+    private void OpenInventory()
+    {
+        menuActivated = true;
+        Time.timeScale = 0f;
+        InventoryMenu.SetActive(true);
+        if (followCameraGO != null) followCameraGO.SetActive(false);
+
+        // If the game is already paused, just hide the pause UI
+        var pause = FindObjectOfType<PauseMenu>();
+        if (pause != null && PauseMenu.paused)
+            pause.HideUIOnly();
+    }
+
+    // Fully close inventory (resume only if pause isn't active)
+    private void CloseInventory()
+    {
+        menuActivated = false;
+        InventoryMenu.SetActive(false);
+
+        if (!PauseMenu.paused)
+        {
+            // No pause-menu open, so actually unpause
+            Time.timeScale = 1f;
+            if (followCameraGO != null) followCameraGO.SetActive(true);
+        }
+        else
+        {
+            // Pause-menu is still active, so re-show it
+            var pause = FindObjectOfType<PauseMenu>();
+            if (pause != null)
+                pause.ShowUIOnly();
+        }
+    }
+
+    // Just hide the inventory UI without touching timeScale or camera
+    public void HideUIOnly()
+    {
+        if (!menuActivated) return;
+        menuActivated = false;
+        InventoryMenu.SetActive(false);
+    }
+}
