@@ -28,12 +28,6 @@ public class InteractableWisp : MonoBehaviour, IInteractable
         // Checks if scene is in the Main Game Index (non-tutorial gameplay)
         if (SceneManager.GetActiveScene().buildIndex == 1)
         {
-            // stuff here for inventory collection system
-            //
-            //
-            //
-            //
-
             if (uiManager != null)
             {
                 uiManager.ShowMessage(_collectMessage);
