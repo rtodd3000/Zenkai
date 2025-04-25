@@ -6,6 +6,7 @@ public class InventoryManager : MonoBehaviour
     public GameObject followCameraGO;
 
     private bool menuActivated = false;
+    public ItemSlot[] itemSlot;
 
     void Update()
     {
@@ -57,5 +58,17 @@ public class InventoryManager : MonoBehaviour
         if (!menuActivated) return;
         menuActivated = false;
         InventoryMenu.SetActive(false);
+    }
+
+    public void AddItem(string itemName, int quantity, Sprite itemSprite)
+    {
+        for(int i = 0; i < itemSlot.Length; i++)
+        {
+            if(itemSlot[i].isFull == false)
+            {
+                itemSlot[i].AddItem(itemName, quantity, itemSprite);
+                return;
+            }
+        }
     }
 }
