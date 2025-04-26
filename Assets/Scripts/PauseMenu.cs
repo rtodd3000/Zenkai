@@ -63,6 +63,18 @@ public class PauseMenu : MonoBehaviour
 
     public void MainMenuButton()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+        // Cache the current index for clarity
+        int idx = SceneManager.GetActiveScene().buildIndex;
+
+        if (idx == 2)  // ← use '==' to compare, not '='
+        {
+            // From tutorial (2) back to main menu (0)
+            SceneManager.LoadScene(idx - 2);
+        }
+        else
+        {
+            // From any other level back one scene
+            SceneManager.LoadScene(idx - 1);
+        }
     }
 }

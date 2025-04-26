@@ -1,33 +1,14 @@
-using System.Collections;
 using UnityEngine;
 
-public class InteractableSign : MonoBehaviour, IInteractable
+public class InteractableSign : BaseInteractable
 {
-    [SerializeField] private string _prompt; // Shown in interaction UI
-    
-    [TextArea(3, 5)]
-    [SerializeField] private string _messageText; // The full sign message shown via UIManager
+    [TextArea(3,5)]
+    [SerializeField] private string _messageText; // The message to show
 
-    public string InteractionPrompt => _prompt;
-
-    public bool Interact(Interactor interactor)
+    public override bool Interact(Interactor interactor)
     {
-        // debug tool for testing
         Debug.Log("Reading Sign!");
-
-        // Find the UIManager in the scene and display the corresponding message.
-        UIManager uiManager = FindObjectOfType<UIManager>();
-        if (uiManager != null)
-        {
-            // a prompt in the gameobject to easily test
-            uiManager.ShowMessage(_messageText);
-        }
-        else
-        {
-            // debug tool for testing
-            Debug.LogWarning("UIManager not found in the scene.");
-        }
-
+        uiManager?.ShowMessage(_messageText);
         return true;
     }
 }

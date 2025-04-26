@@ -2,44 +2,38 @@
 
 using UnityEngine;
 
-public class InteractablePickUp : MonoBehaviour, IInteractable
+public class InteractablePickUp : BaseInteractable
 {
-    [SerializeField]
-    private string itemName;
-    [SerializeField]
-    private int quantity;
-    [SerializeField]
-    private Sprite sprite;
+    [Header("Item Data")]
+    [SerializeField] private string  itemName;
+    [SerializeField] private int     quantity;
+    [SerializeField] private Sprite  sprite;
 
-    [SerializeField] private string _prompt; // Shown in interaction UI
-    
+    [Header("Message")]
     [TextArea(3, 5)]
-    [SerializeField] private string _messageText; // The full sign message shown via UIManager
-    public string InteractionPrompt => _prompt;
+    [SerializeField] private string  _messageText;
+
     private InventoryManager inventoryManager;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    protected override void Start()
     {
-        inventoryManager = GameObject.Find("InventoryCanvas").GetComponent<InventoryManager>();
+        base.Start();
+        // cache your InventoryManager once
+        inventoryManager = FindObjectOfType<InventoryManager>();
+        if (inventoryManager == null)
+            Debug.LogWarning("InteractablePickUp: InventoryManager not found");
     }
-     public bool Interact(Interactor interactor)
+
+    public override bool Interact(Interactor interactor)
     {
-        // Destroy the game object upon interaction.
-        inventoryManager.AddItem(itemName, quantity, sprite);
+        // 1) Add to inventory
+        inventoryManager?.AddItem(itemName, quantity, sprite);
+
+        // 2) Destroy this pick‐up object
         Destroy(gameObject);
 
-        // Find the UIManager in the scene
-        UIManager uiManager = FindObjectOfType<UIManager>();
-
-        if (uiManager != null)
-        {
-            uiManager.ShowMessage(_messageText);
-        }
-        else
-        {
-            Debug.LogWarning("UIManager not found in the scene.");
-        }
+        // 3) Show your custom message
+        uiManager?.ShowMessage(_messageText);
 
         return true;
     }

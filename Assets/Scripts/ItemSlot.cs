@@ -29,4 +29,9 @@ public class ItemSlot : MonoBehaviour
         quantityText.enabled = true;
         itemImage.sprite = itemSprite;
     }
+    public void IncreaseQuantity(int amount)
+    {
+        quantity += amount;
+        quantityText.text = quantity.ToString();
+    }
 }

@@ -1,3 +1,5 @@
+// By Night Run Studio on YT
+
 using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
@@ -62,6 +64,16 @@ public class InventoryManager : MonoBehaviour
 
     public void AddItem(string itemName, int quantity, Sprite itemSprite)
     {
+        for (int i = 0; i < itemSlot.Length; i++)
+        {
+            if (itemSlot[i].isFull && itemSlot[i].itemName == itemName)
+            {
+                // Found same item—just bump quantity
+                itemSlot[i].IncreaseQuantity(quantity);
+                return;
+            }
+        }
+
         for(int i = 0; i < itemSlot.Length; i++)
         {
             if(itemSlot[i].isFull == false)
