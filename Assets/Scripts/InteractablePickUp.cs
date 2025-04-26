@@ -8,6 +8,8 @@ public class InteractablePickUp : BaseInteractable
     [SerializeField] private string  itemName;
     [SerializeField] private int     quantity;
     [SerializeField] private Sprite  sprite;
+    [TextArea(3, 5)]
+    [SerializeField] private string itemDescription;
 
     [Header("Message")]
     [TextArea(3, 5)]
@@ -27,7 +29,7 @@ public class InteractablePickUp : BaseInteractable
     public override bool Interact(Interactor interactor)
     {
         // 1) Add to inventory
-        inventoryManager?.AddItem(itemName, quantity, sprite);
+        inventoryManager?.AddItem(itemName, quantity, sprite, itemDescription);
 
         // 2) Destroy this pick‐up object
         Destroy(gameObject);
