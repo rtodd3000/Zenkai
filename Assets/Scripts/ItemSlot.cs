@@ -3,8 +3,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
-public class ItemSlot : MonoBehaviour
+public class ItemSlot : MonoBehaviour, IPointerClickHandler
 {
     // Item Data
     public string itemName;
@@ -18,6 +19,16 @@ public class ItemSlot : MonoBehaviour
     [SerializeField]
     private Image itemImage;
 
+    public GameObject selectedShader;
+    public bool thisItemSelected;
+
+    private InventoryManager inventoryManager;
+
+    private void Start()
+    {
+        inventoryManager = GameObject.Find("InventoryCanvas").GetComponent<InventoryManager>();
+    }
+
     public void AddItem(string itemName, int quantity, Sprite itemSprite)
     {
         this.itemName = itemName;
@@ -29,9 +40,35 @@ public class ItemSlot : MonoBehaviour
         quantityText.enabled = true;
         itemImage.sprite = itemSprite;
     }
+
     public void IncreaseQuantity(int amount)
     {
         quantity += amount;
         quantityText.text = quantity.ToString();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if(eventData.button == PointerEventData.InputButton.Left)
+        {
+            OnLeftClick();
+        }
+
+        if(eventData.button == PointerEventData.InputButton.Right)
+        {
+            OnRightClick();
+        }
+    }
+
+    public void OnLeftClick()
+    {
+        inventoryManager.DeselectAllSlots();
+        selectedShader.SetActive(true);
+        thisItemSelected = true;
+    }
+
+        public void OnRightClick()
+    {
+
     }
 }

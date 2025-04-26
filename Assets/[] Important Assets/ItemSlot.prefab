@@ -97,6 +97,8 @@ MonoBehaviour:
   isFull: 0
   quantityText: {fileID: 1521745892533310178}
   itemImage: {fileID: 9204817224541868089}
+  selectedShader: {fileID: 7064194588593338828}
+  thisItemSelected: 0
 --- !u!1 &6347995873570375491
 GameObject:
   m_ObjectHideFlags: 0

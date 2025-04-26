@@ -27,6 +27,10 @@ public class InventoryManager : MonoBehaviour
         InventoryMenu.SetActive(true);
         if (followCameraGO != null) followCameraGO.SetActive(false);
 
+        // SHOW the mouse cursor
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
         // If the game is already paused, just hide the pause UI
         var pause = FindObjectOfType<PauseMenu>();
         if (pause != null && PauseMenu.paused)
@@ -44,6 +48,10 @@ public class InventoryManager : MonoBehaviour
             // No pause-menu open, so actually unpause
             Time.timeScale = 1f;
             if (followCameraGO != null) followCameraGO.SetActive(true);
+
+            // HIDE the mouse cursor again
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
         }
         else
         {
@@ -81,6 +89,16 @@ public class InventoryManager : MonoBehaviour
                 itemSlot[i].AddItem(itemName, quantity, itemSprite);
                 return;
             }
+        }
+    }
+
+    public void DeselectAllSlots()
+    {
+        for (int i = 0; i < itemSlot.Length; i++)
+        {
+
+            itemSlot[i].selectedShader.SetActive(false);
+            itemSlot[i].thisItemSelected = false;
         }
     }
 }
