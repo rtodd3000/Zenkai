@@ -3,36 +3,53 @@ using UnityEngine.SceneManagement;
 
 public class InteractableWisp : BaseInteractable
 {
-    [Header("Wisp Message")]
+    [Header("Wisp Messages")]
     [TextArea(2,4)]
-    [SerializeField] private string _collectMessage = "You got a Wisp!";
+    [SerializeField] private string _collectMessage  = "You got a Wisp!";  
+    [TextArea(2,4)]
+    [SerializeField] private string _completeMessage = "You collected 7 wisps! Demo is Complete!";
 
-    private static int wispCount = 0;
+    private InventoryManager _inventoryManager;
 
-    // Called before Start; we use this to gate the whole component
     private void Awake()
     {
-        // If we're not in scene index 2, turn ourselves off entirely
+        // Only enable in scene index 2 (tutorial/demo)
         if (SceneManager.GetActiveScene().buildIndex != 2)
-        {
             enabled = false;
-        }
     }
 
-    // BaseInteractable.Start() will cache UIManager for us already
+    protected override void Start()
+    {
+        base.Start();  // caches uiManager for you
+
+        // Cache InventoryManager so we can add currency
+        _inventoryManager = FindObjectOfType<InventoryManager>();
+        if (_inventoryManager == null)
+            Debug.LogWarning("InteractableWisp: InventoryManager not found in scene");
+    }
 
     public override bool Interact(Interactor interactor)
     {
-        // Only runs if Awake left us enabled (i.e. scene == 2)
+        // Destroy the wisp in the world
+        Destroy(gameObject);
 
-        wispCount++;
-        if (wispCount == 7)
+        // Add 1 wisp to the global currency
+        _inventoryManager?.AddCurrency(1);
+
+        // Fetch the new total
+        int total = _inventoryManager != null
+            ? _inventoryManager.WispCurrency
+            : 0;
+
+        // If this was the 7th, show complete message
+        if (total == 7)
         {
-            uiManager?.ShowMessage("You collected 7 wisps! Demo is Complete");
+            uiManager?.ShowMessage(_completeMessage);
         }
         else
         {
-            uiManager?.ShowMessage(_collectMessage);
+            // Otherwise show the collect prompt + current total
+            uiManager?.ShowMessage($"{_collectMessage}\nWisps: {total}");
         }
 
         return true;

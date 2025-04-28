@@ -2,54 +2,56 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
+using StarterAssets;  // namespace for the ThirdPersonController
 
 public class UpgradeSlot : MonoBehaviour, IPointerClickHandler
 {
-    // Upgrade Data
-    public string upgradeName;
-    public int quantity;
-    public Sprite upgradeSprite;
-    public bool isFull;
-    public string upgradeDescription;
+    public enum UpgradeType { Speed, Jump }
 
-    // UI References
-    [SerializeField] private TMP_Text quantityText;
+    [Header("Data")]
+    public string      upgradeName;
+    public int         quantity;
+    public Sprite      upgradeSprite;
+    public int         cost   = 5;
+    public UpgradeType type   = UpgradeType.Speed;
+    public float       amount = 0.5f;  // how much to bump per purchase
+
+    [Header("Slot UI")]
     [SerializeField] private Image    upgradeImage;
+    [SerializeField] private TMP_Text quantityText;
     [SerializeField] private GameObject selectedShader;
+    public bool thisItemSelected;
 
-    // Centralized description panel
-    private UpgradeDescriptionPanel descPanel;
+    [Header("Description Prefab")]
+    [SerializeField] private GameObject myDescriptionPanel;
+
+    // Cached references
+    private ShopManager            shopManager;
+    private InventoryManager       inventoryManager;
+    private UIManager              uiManager;
+    private ThirdPersonController  playerController;
 
     private void Start()
     {
-        // Cache the description panel in the scene
-        descPanel = FindObjectOfType<UpgradeDescriptionPanel>();
-        if (descPanel == null)
-            Debug.LogWarning("UpgradeSlot: No UpgradeDescriptionPanel found in scene");
+        shopManager       = FindObjectOfType<ShopManager>();
+        inventoryManager  = FindObjectOfType<InventoryManager>();
+        uiManager         = FindObjectOfType<UIManager>();
+        playerController  = FindObjectOfType<ThirdPersonController>();
+
+        upgradeImage.sprite = upgradeSprite;
+        Deselect();
+        myDescriptionPanel.SetActive(false);
+        UpdateQuantityUI();
     }
 
-    /// <summary>
-    /// Initializes this slot with upgrade data.
-    /// </summary>
-    public void AddItem(string upgradeName, int quantity, Sprite upgradeSprite, string upgradeDescription)
+    public void IncreaseQuantity(int delta)
     {
-        this.upgradeName        = upgradeName;
-        this.quantity           = quantity;
-        this.upgradeSprite      = upgradeSprite;
-        this.upgradeDescription = upgradeDescription;
-        isFull                  = true;
-
-        upgradeImage.sprite     = upgradeSprite;
-        quantityText.text       = this.quantity.ToString();
-        quantityText.enabled    = true;
+        quantity += delta;
+        UpdateQuantityUI();
     }
 
-    /// <summary>
-    /// Increases the quantity of this upgrade in the slot.
-    /// </summary>
-    public void IncreaseQuantity(int amount)
+    private void UpdateQuantityUI()
     {
-        quantity += amount;
         quantityText.text = quantity.ToString();
     }
 
@@ -57,18 +59,60 @@ public class UpgradeSlot : MonoBehaviour, IPointerClickHandler
     {
         if (eventData.button == PointerEventData.InputButton.Left)
             OnLeftClick();
+        else if (eventData.button == PointerEventData.InputButton.Right)
+            OnRightClick();
     }
 
-    /// <summary>
-    /// Handles left‐click: highlights slot and shows description.
-    /// </summary>
-    private void OnLeftClick()
+    public void OnLeftClick()
     {
-        // Deselect other slots
-        FindObjectOfType<ShopManager>()?.DeselectAllSlots();
-        selectedShader.SetActive(true);
+        shopManager?.DeselectAllDescriptions();
+        shopManager?.DeselectAllSlots();
 
-        // Display this upgrade’s details in the central panel
-        descPanel?.Show(upgradeName, upgradeDescription, upgradeSprite);
+        selectedShader.SetActive(true);
+        thisItemSelected = true;
+
+        myDescriptionPanel.SetActive(true);
+    }
+
+    private void OnRightClick()
+    {
+        // Try to spend the wisps
+        if (inventoryManager != null && inventoryManager.SpendCurrency(cost))
+        {
+            // Apply the actual upgrade effect
+            if (playerController != null)
+            {
+                switch (type)
+                {
+                    case UpgradeType.Speed:
+                        // These are the public fields in StarterAssets' ThirdPersonController
+                        playerController.MoveSpeed   += amount;
+                        playerController.SprintSpeed += amount;
+                        break;
+                    case UpgradeType.Jump:
+                        playerController.JumpHeight += amount;
+                        break;
+                }
+            }
+
+            // Track how many you've bought
+            IncreaseQuantity(1);
+
+            uiManager?.ShowMessage(
+                $"Bought {upgradeName} for {cost} wisps!\n" +
+                $"You now have {quantity}.\n" +
+                $"Remaining Wisps: {inventoryManager.WispCurrency}"
+            );
+        }
+        else
+        {
+            uiManager?.ShowMessage("Not enough wisps!");
+        }
+    }
+
+    public void Deselect()
+    {
+        thisItemSelected = false;
+        selectedShader.SetActive(false);
     }
 }

@@ -1,81 +1,68 @@
 // By Night Run Studio on YT
 
-// By Night Run Studio on YT
-
 using UnityEngine;
 
 public class ShopManager : MonoBehaviour
 {
     [Header("UI & Camera")]
-    public GameObject ShopMenu;       // Your shop UI panel
-    public GameObject followCameraGO; // Cinemachine vcam or similar
+    public GameObject ShopMenu;
+    public GameObject followCameraGO;
 
     [Header("Slots")]
     public UpgradeSlot[] upgradeSlots;
 
+    [Header("Description Panels")]
+    public GameObject[] descriptionPanels;
+
     private bool menuActivated = false;
 
-    void Update()
-    {
-        // Still allow Tab to toggle shop if you want
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            if (menuActivated) CloseShop();
-            else             OpenShop();
-        }
-    }
-
-    /// <summary>
-    /// Opens the shop: pauses game, shows UI, hides camera, shows cursor.
-    /// </summary>
-    public void OpenShop()
-    {
-        if (menuActivated) return;
-
-        menuActivated = true;
-        Time.timeScale = 0f;
-        ShopMenu.SetActive(true);
-        if (followCameraGO != null) followCameraGO.SetActive(false);
-
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
-
-        // If the game is paused by the pause menu, hide that UI
-        var pause = FindObjectOfType<PauseMenu>();
-        if (pause != null && PauseMenu.paused)
-            pause.HideUIOnly();
-    }
-
-    /// <summary>
-    /// Closes the shop: optionally unpauses, hides UI, re-enables camera, hides cursor.
-    /// </summary>
-    public void CloseShop()
+    private void Update()
     {
         if (!menuActivated) return;
 
-        menuActivated = false;
-        ShopMenu.SetActive(false);
-
-        // Only unpause if the pause menu isn't active
-        if (!PauseMenu.paused)
+        // Close shop if player presses E, Escape, or Tab
+        if (Input.GetKeyDown(KeyCode.E) ||
+            Input.GetKeyDown(KeyCode.Escape) ||
+            Input.GetKeyDown(KeyCode.Tab))
         {
-            Time.timeScale = 1f;
-            if (followCameraGO != null) followCameraGO.SetActive(true);
-
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-        }
-        else
-        {
-            // If pause is still active, re‐show its UI
-            var pause = FindObjectOfType<PauseMenu>();
-            pause?.ShowUIOnly();
+            CloseShop();
         }
     }
 
-    /// <summary>
-    /// Hides just the shop UI (used by PauseMenu).
-    /// </summary>
+    /// <summary>Hide every description prefab.</summary>
+    public void DeselectAllDescriptions()
+    {
+        foreach (var panel in descriptionPanels)
+            panel.SetActive(false);
+    }
+    
+    /// <summary>Show shop UI (without pausing game).</summary>
+    public void OpenShop()
+    {
+        if (menuActivated) return;
+        menuActivated = true;
+
+        ShopMenu.SetActive(true);
+        followCameraGO?.SetActive(false);
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    /// <summary>Hide shop UI and restore camera/cursor.</summary>
+    public void CloseShop()
+    {
+        if (!menuActivated) return;
+        menuActivated = false;
+
+        ShopMenu.SetActive(false);
+        followCameraGO?.SetActive(true);
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    /// <summary>Hide shop UI if you need to from elsewhere.</summary>
     public void HideUIOnly()
     {
         if (!menuActivated) return;
@@ -83,27 +70,10 @@ public class ShopManager : MonoBehaviour
         ShopMenu.SetActive(false);
     }
 
-    /// <summary>
-    /// Helper to add items into the shop’s item slots (if you want to populate items at runtime).
-    /// </summary>
-    public void AddItem(string itemName, int quantity, Sprite itemSprite, string itemDescription)
+    /// <summary>Deselect all slot highlights.</summary>
+    public void DeselectAllSlots()
     {
-        // identical stacking logic to your inventory...
-        for (int i = 0; i < upgradeSlots.Length; i++)
-        {
-            if (upgradeSlots[i].isFull && upgradeSlots[i].itemName == itemName)
-            {
-                upgradeSlots[i].IncreaseQuantity(quantity);
-                return;
-            }
-        }
-        for (int i = 0; i < upgradeSlots.Length; i++)
-        {
-            if (!upgradeSlots[i].isFull)
-            {
-                upgradeSlots[i].AddItem(itemName, quantity, itemSprite, itemDescription);
-                return;
-            }
-        }
+        foreach (var slot in upgradeSlots)
+            slot.Deselect();
     }
 }

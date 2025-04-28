@@ -17,14 +17,8 @@ public class InteractableObelisk : BaseInteractable
 
     public override bool Interact(Interactor interactor)
     {
-        Debug.Log("Opening Shop!");
-        
-        // Optional: show a little prompt or message first
         uiManager?.ShowMessage(_messageText);
-
-        // Then actually open the shop UI
         shopManager?.OpenShop();
-        
         return true;
     }
 }

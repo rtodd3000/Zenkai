@@ -10,6 +10,8 @@ public class InventoryManager : MonoBehaviour
     private bool menuActivated = false;
     public ItemSlot[] itemSlot;
 
+    [Header("Currency (Wisps)")]
+    public int WispCurrency { get; private set; } = 0;
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Tab))
@@ -68,6 +70,24 @@ public class InventoryManager : MonoBehaviour
         if (!menuActivated) return;
         menuActivated = false;
         InventoryMenu.SetActive(false);
+    }
+
+    /// <summary>Add wisps to your currency total.</summary>
+    public void AddCurrency(int amount)
+    {
+        WispCurrency += amount;
+        // (Optionally update a UI text somewhere)
+    }
+
+    /// <summary>Try to spend wisps; returns true on success.</summary>
+    public bool SpendCurrency(int amount)
+    {
+        if (WispCurrency >= amount)
+        {
+            WispCurrency -= amount;
+            return true;
+        }
+        return false;
     }
 
     public void AddItem(string itemName, int quantity, Sprite itemSprite, string itemDescription)
