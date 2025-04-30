@@ -30,6 +30,7 @@ public class InteractableWisp : BaseInteractable
 
     public override bool Interact(Interactor interactor)
     {
+        Debug.Log("[Wisp] Interact() called on " + gameObject.name);
         // Destroy the wisp in the world
         Destroy(gameObject);
 

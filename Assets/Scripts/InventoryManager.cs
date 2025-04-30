@@ -76,15 +76,18 @@ public class InventoryManager : MonoBehaviour
     public void AddCurrency(int amount)
     {
         WispCurrency += amount;
+        Debug.Log($"[Currency] Added {amount}, total now {WispCurrency}");
         // (Optionally update a UI text somewhere)
     }
 
     /// <summary>Try to spend wisps; returns true on success.</summary>
     public bool SpendCurrency(int amount)
     {
+        Debug.Log($"[Currency] Attempting to spend {amount}, you have {WispCurrency}");
         if (WispCurrency >= amount)
         {
             WispCurrency -= amount;
+            Debug.Log($"[Currency] Spent {amount}, remaining {WispCurrency}");
             return true;
         }
         return false;

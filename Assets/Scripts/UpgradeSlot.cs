@@ -99,9 +99,7 @@ public class UpgradeSlot : MonoBehaviour, IPointerClickHandler
             IncreaseQuantity(1);
 
             uiManager?.ShowMessage(
-                $"Bought {upgradeName} for {cost} wisps!\n" +
-                $"You now have {quantity}.\n" +
-                $"Remaining Wisps: {inventoryManager.WispCurrency}"
+                $"Bought {upgradeName} for {cost} wisps! You now have {quantity}. Remaining Wisps: {inventoryManager.WispCurrency}"
             );
         }
         else

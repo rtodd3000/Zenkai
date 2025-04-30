@@ -11,6 +11,10 @@ public class InteractablePickUp : BaseInteractable
     [TextArea(3, 5)]
     [SerializeField] private string itemDescription;
 
+    [Header("Behavior")]
+    [Tooltip("If true, this pickup adds wisps (currency) instead of a normal item")]
+    [SerializeField] private bool    isCurrencyPickup = false;
+
     [Header("Message")]
     [TextArea(3, 5)]
     [SerializeField] private string  _messageText;
@@ -28,15 +32,24 @@ public class InteractablePickUp : BaseInteractable
 
     public override bool Interact(Interactor interactor)
     {
-        // 1) Add to inventory
-        inventoryManager?.AddItem(itemName, quantity, sprite, itemDescription);
+        Debug.Log("Interact() called on " + gameObject.name);
+        // 1) If this is a wisp/currency, add to your wisp balance:
+        if (isCurrencyPickup)
+        {
+            inventoryManager.AddCurrency(quantity);
+            uiManager?.ShowMessage(
+                $"You picked up {quantity} wisps! Total Wisps: {inventoryManager.WispCurrency}"
+            );
+        }
+        else
+        {
+            // 2) Otherwise treat it like a normal item
+            inventoryManager.AddItem(itemName, quantity, sprite, itemDescription);
+            uiManager?.ShowMessage(_messageText);
+        }
 
-        // 2) Destroy this pick‐up object
+        // 3) Destroy the world object and return
         Destroy(gameObject);
-
-        // 3) Show your custom message
-        uiManager?.ShowMessage(_messageText);
-
         return true;
     }
 }
