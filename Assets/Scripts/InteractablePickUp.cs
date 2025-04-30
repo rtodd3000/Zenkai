@@ -33,14 +33,15 @@ public class InteractablePickUp : BaseInteractable
     public override bool Interact(Interactor interactor)
     {
         Debug.Log("Interact() called on " + gameObject.name);
-
-        // 1) Add to your inventory UI (so wisp shows up as an item, if you want)
+        // 1) Always add the item to the grid
         inventoryManager.AddItem(itemName, quantity, sprite, itemDescription);
 
-        // 2) If it’s a wisp, also treat it as currency
         if (isCurrencyPickup)
         {
-            inventoryManager.AddCurrency(quantity);
+            // 2) Immediately re-sync your wisp balance from the inventory slots
+            inventoryManager.SyncCurrencyFromInventory(itemName);
+
+            // 3) Show exactly how many wisps you now have
             uiManager?.ShowMessage(
                 $"You picked up {quantity} wisps! " +
                 $" Total Wisps: {inventoryManager.WispCurrency}"
@@ -48,11 +49,10 @@ public class InteractablePickUp : BaseInteractable
         }
         else
         {
-            // Normal item pickup message
             uiManager?.ShowMessage(_messageText);
         }
 
-        // 3) Destroy the pickup in the world
+        // 4) Finally destroy the world object
         Destroy(gameObject);
         return true;
     }

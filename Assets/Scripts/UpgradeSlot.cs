@@ -74,39 +74,45 @@ public class UpgradeSlot : MonoBehaviour, IPointerClickHandler
         myDescriptionPanel.SetActive(true);
     }
 
-    private void OnRightClick()
+/// <summary>Try to buy one upgrade on right‐click.</summary>
+private void OnRightClick()
+{
+    // 1) Attempt to spend the wisps
+    if (inventoryManager != null && inventoryManager.SpendCurrency(cost))
     {
-        // Try to spend the wisps
-        if (inventoryManager != null && inventoryManager.SpendCurrency(cost))
+        // 2) Remove exactly 'cost' wisps from your inventory slots
+        inventoryManager.RemoveCurrencyFromSlots("Wisp", cost);
+
+        // 3) Apply the actual upgrade effect
+        if (playerController != null)
         {
-            // Apply the actual upgrade effect
-            if (playerController != null)
+            switch (type)
             {
-                switch (type)
-                {
-                    case UpgradeType.Speed:
-                        // These are the public fields in StarterAssets' ThirdPersonController
-                        playerController.MoveSpeed   += amount;
-                        playerController.SprintSpeed += amount;
-                        break;
-                    case UpgradeType.Jump:
-                        playerController.JumpHeight += amount;
-                        break;
-                }
+                case UpgradeType.Speed:
+                    playerController.MoveSpeed   += amount;
+                    playerController.SprintSpeed += amount;
+                    break;
+                case UpgradeType.Jump:
+                    playerController.JumpHeight += amount;
+                    break;
             }
-
-            // Track how many you've bought
-            IncreaseQuantity(1);
-
-            uiManager?.ShowMessage(
-                $"Bought {upgradeName} for {cost} wisps! You now have {quantity}. Remaining Wisps: {inventoryManager.WispCurrency}"
-            );
         }
-        else
-        {
-            uiManager?.ShowMessage("Not enough wisps!");
-        }
+
+        // 4) Track how many you've bought
+        IncreaseQuantity(1);
+
+        // 5) Show confirmation
+        uiManager?.ShowMessage(
+            $"Bought {upgradeName} for {cost} wisps! You now have {quantity}. " +
+            $"Remaining Wisps: {inventoryManager.WispCurrency}"
+        );
     }
+    else
+    {
+        uiManager?.ShowMessage("Not enough wisps!");
+    }
+}
+
 
     public void Deselect()
     {

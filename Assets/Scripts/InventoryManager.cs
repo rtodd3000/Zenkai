@@ -72,6 +72,21 @@ public class InventoryManager : MonoBehaviour
         InventoryMenu.SetActive(false);
     }
 
+    /// <summary>
+    /// Recomputes WispCurrency by summing all ItemSlots that match the given name.
+    /// </summary>
+    public void SyncCurrencyFromInventory(string currencyItemName)
+    {
+        int sum = 0;
+        foreach (var slot in itemSlot)
+        {
+            if (slot.isFull && slot.itemName == currencyItemName)
+                sum += slot.quantity;
+        }
+        WispCurrency = sum;
+        Debug.Log($"[Currency] Synced from inventory: {WispCurrency} {currencyItemName}s");
+    }
+
     /// <summary>Add wisps to your currency total.</summary>
     public void AddCurrency(int amount)
     {
@@ -92,6 +107,27 @@ public class InventoryManager : MonoBehaviour
         }
         return false;
     }
+
+    /// <summary>
+    /// Remove up to `amount` wisps from your grid slots named `currencyItemName`.
+    /// </summary>
+    public void RemoveCurrencyFromSlots(string currencyItemName, int amount)
+    {
+        int remaining = amount;
+        foreach (var slot in itemSlot)
+        {
+            if (remaining <= 0) break;
+            if (slot.isFull && slot.itemName == currencyItemName)
+            {
+                int take = Mathf.Min(slot.quantity, remaining);
+                slot.DecreaseQuantity(take);
+                remaining -= take;
+            }
+        }
+        SyncCurrencyFromInventory(currencyItemName);
+    }
+
+
 
     public void AddItem(string itemName, int quantity, Sprite itemSprite, string itemDescription)
     {

@@ -52,7 +52,24 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler
     {
         quantity += amount;
         quantityText.text = quantity.ToString();
+
+        if (itemName == "Wisp" && inventoryManager != null)
+        {
+            inventoryManager.SyncCurrencyFromInventory("Wisp");
+        }
     }
+
+    public void DecreaseQuantity(int amount)
+    {
+        quantity = Mathf.Max(0, quantity - amount);
+        quantityText.text = quantity > 0 ? quantity.ToString() : "";
+        if (quantity == 0)
+        {
+            isFull = false;
+            // optionally clear description fields here if selected
+        }
+    }
+
 
     public void OnPointerClick(PointerEventData eventData)
     {
