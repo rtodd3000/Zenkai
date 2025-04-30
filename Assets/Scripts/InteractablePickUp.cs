@@ -33,24 +33,26 @@ public class InteractablePickUp : BaseInteractable
     public override bool Interact(Interactor interactor)
     {
         Debug.Log("Interact() called on " + gameObject.name);
-        // 1) If this is a wisp/currency, add to your wisp balance:
+
+        // 1) Add to your inventory UI (so wisp shows up as an item, if you want)
+        inventoryManager.AddItem(itemName, quantity, sprite, itemDescription);
+
+        // 2) If it’s a wisp, also treat it as currency
         if (isCurrencyPickup)
         {
             inventoryManager.AddCurrency(quantity);
             uiManager?.ShowMessage(
-                $"You picked up {quantity} wisps! Total Wisps: {inventoryManager.WispCurrency}"
+                $"You picked up {quantity} wisps! " +
+                $" Total Wisps: {inventoryManager.WispCurrency}"
             );
-            inventoryManager.AddItem(itemName, quantity, sprite, itemDescription);
-            uiManager?.ShowMessage(_messageText);
         }
         else
         {
-            // 2) Otherwise treat it like a normal item
-            inventoryManager.AddItem(itemName, quantity, sprite, itemDescription);
+            // Normal item pickup message
             uiManager?.ShowMessage(_messageText);
         }
 
-        // 3) Destroy the world object and return
+        // 3) Destroy the pickup in the world
         Destroy(gameObject);
         return true;
     }
