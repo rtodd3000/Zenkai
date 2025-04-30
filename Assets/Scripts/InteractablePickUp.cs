@@ -40,6 +40,8 @@ public class InteractablePickUp : BaseInteractable
             uiManager?.ShowMessage(
                 $"You picked up {quantity} wisps! Total Wisps: {inventoryManager.WispCurrency}"
             );
+            inventoryManager.AddItem(itemName, quantity, sprite, itemDescription);
+            uiManager?.ShowMessage(_messageText);
         }
         else
         {
