@@ -17,6 +17,10 @@ public class ClimbingBehaviour : MonoBehaviour
 
     public float landingRayDistance = 15f;
     public float landingOffset = 0.1f;
+    
+    // Add wider wall detection parameters
+    public float wallCheckWidth = 0.5f;
+    public int wallCheckRays = 3;
 
     private bool isClimbing = false;
     private Vector3 originalPosition;
@@ -105,15 +109,55 @@ public class ClimbingBehaviour : MonoBehaviour
         Debug.Log("Started climbing. New starting position: " + transform.position);
     }
 
+    bool IsWallInFront()
+    {
+        // Cast multiple rays to check for wall contact
+        float halfWidth = wallCheckWidth / 2f;
+        
+        // Start with center ray
+        Vector3 frontRayOrigin = transform.position - transform.forward * 0.3f;
+        RaycastHit centerHit;
+        bool centerHasContact = Physics.Raycast(frontRayOrigin, transform.forward, out centerHit, 1.0f, climbableLayer);
+        Debug.DrawRay(frontRayOrigin, transform.forward * 1.0f, centerHasContact ? Color.green : Color.red);
+        
+        if (centerHasContact)
+            return true;
+            
+        // Check additional rays to the sides
+        for (int i = 1; i <= wallCheckRays/2; i++)
+        {
+            float offset = (halfWidth * i) / (wallCheckRays/2);
+            
+            // Left check
+            Vector3 leftOrigin = frontRayOrigin + transform.right * -offset;
+            bool leftContact = Physics.Raycast(leftOrigin, transform.forward, 1.0f, climbableLayer);
+            Debug.DrawRay(leftOrigin, transform.forward * 1.0f, leftContact ? Color.green : Color.yellow);
+            
+            // Right check
+            Vector3 rightOrigin = frontRayOrigin + transform.right * offset;
+            bool rightContact = Physics.Raycast(rightOrigin, transform.forward, 1.0f, climbableLayer);
+            Debug.DrawRay(rightOrigin, transform.forward * 1.0f, rightContact ? Color.green : Color.yellow);
+            
+            if (leftContact || rightContact)
+                return true;
+        }
+        
+        // Also check from hand positions for better detection
+        bool leftHandContact = Physics.Raycast(leftHandTarget.position, transform.forward, 1.0f, climbableLayer);
+        bool rightHandContact = Physics.Raycast(rightHandTarget.position, transform.forward, 1.0f, climbableLayer);
+        
+        Debug.DrawRay(leftHandTarget.position, transform.forward * 1.0f, leftHandContact ? Color.green : Color.yellow);
+        Debug.DrawRay(rightHandTarget.position, transform.forward * 1.0f, rightHandContact ? Color.green : Color.yellow);
+        
+        return leftHandContact || rightHandContact;
+    }
+
     void HandleClimbing()
     {
         float climbInputVertical = Input.GetAxis("Vertical");
         float climbInputHorizontal = Input.GetAxis("Horizontal");
 
-        Vector3 frontRayOrigin = transform.position - transform.forward * 0.3f;
-        RaycastHit frontHit;
-        bool isTouchingClimbable = Physics.Raycast(frontRayOrigin, transform.forward, out frontHit, 1.0f, climbableLayer);
-        Debug.DrawRay(frontRayOrigin, transform.forward * 1.0f, Color.cyan);
+        bool isTouchingClimbable = IsWallInFront();
 
         if (!isTouchingClimbable)
         {
@@ -125,6 +169,19 @@ public class ClimbingBehaviour : MonoBehaviour
             }
         }
 
+        // Check for ceiling/obstacle above when climbing up
+        if (climbInputVertical > 0)
+        {
+            Vector3 headPosition = transform.position + Vector3.up * 1.8f;
+            RaycastHit ceilingHit;
+            if (Physics.Raycast(headPosition, Vector3.up, out ceilingHit, 0.5f))
+            {
+                Debug.Log("Obstacle above detected, limiting upward movement");
+                climbInputVertical = 0;
+            }
+        }
+
+        // Check for ground below when climbing down
         RaycastHit downHit;
         bool isHittingGround = Physics.Raycast(transform.position, Vector3.down, out downHit, 1.0f, groundLayer);
         if (isHittingGround && climbInputVertical < 0)
@@ -141,7 +198,32 @@ public class ClimbingBehaviour : MonoBehaviour
         Vector3 climbMovement = upwardMovement + horizontalMovement;
 
         transform.position += climbMovement;
-        Debug.Log("Climbing. New position: " + transform.position);
+        
+        // After moving, check if we need to adjust distance from the wall
+        if (isTouchingClimbable)
+        {
+            RaycastHit wallHit;
+            if (Physics.Raycast(transform.position, transform.forward, out wallHit, 1.0f, climbableLayer))
+            {
+                // Adjust position to maintain proper distance from wall
+                float currentDistance = Vector3.Distance(transform.position, wallHit.point);
+                if (Mathf.Abs(currentDistance - distanceFromWall) > 0.1f)
+                {
+                    Vector3 adjustedPosition = wallHit.point + wallHit.normal * distanceFromWall;
+                    adjustedPosition.y = transform.position.y; // Keep the same height
+                    transform.position = Vector3.Lerp(transform.position, adjustedPosition, 0.5f);
+                }
+                
+                // Update wall normal if it changed significantly
+                if (Vector3.Angle(wallNormal, wallHit.normal) > 15f)
+                {
+                    wallNormal = wallHit.normal;
+                    transform.rotation = Quaternion.Lerp(transform.rotation, 
+                                                         Quaternion.LookRotation(-wallHit.normal),
+                                                         0.5f);
+                }
+            }
+        }
     }
 
     void EndClimbing()
@@ -155,29 +237,38 @@ public class ClimbingBehaviour : MonoBehaviour
         if (thirdPersonController != null)
             thirdPersonController.isClimbing = false;
 
+        // Try to detect if we're at the top of a climbable surface
         RaycastHit upwardHit;
         float upwardRayDistance = 2f;
         bool roofDetected = Physics.Raycast(transform.position, Vector3.up, out upwardHit, upwardRayDistance, climbableLayer);
 
         if (roofDetected && Vector3.Dot(upwardHit.normal, Vector3.up) > 0.9f)
         {
-            Vector3 roofPoint = upwardHit.point;
-            Vector3 downwardOrigin = roofPoint + Vector3.up * 1f;
-            RaycastHit downwardHit;
-            if (Physics.Raycast(downwardOrigin, Vector3.down, out downwardHit, upwardRayDistance + 1f, climbableLayer))
+            // Try multiple forward positions to find a suitable landing spot
+            for (float forwardOffset = 0.5f; forwardOffset <= 2.0f; forwardOffset += 0.5f)
             {
-                Vector3 landingPos = downwardHit.point;
-                landingPos.y += (playerCollider != null ? playerCollider.bounds.extents.y : 0f) + landingOffset;
-                transform.position = landingPos;
-                Debug.Log("Landed on roof at: " + landingPos);
-                return;
+                Vector3 topPosition = upwardHit.point + transform.forward * forwardOffset;
+                Vector3 downwardOrigin = topPosition + Vector3.up * 1f;
+                
+                RaycastHit downwardHit;
+                Debug.DrawRay(downwardOrigin, Vector3.down * (upwardRayDistance + 1f), Color.blue, 2f);
+                
+                if (Physics.Raycast(downwardOrigin, Vector3.down, out downwardHit, upwardRayDistance + 1f))
+                {
+                    Vector3 landingPos = downwardHit.point;
+                    landingPos.y += (playerCollider != null ? playerCollider.bounds.extents.y : 0f) + landingOffset;
+                    transform.position = landingPos;
+                    Debug.Log("Landed on top surface at: " + landingPos);
+                    return;
+                }
             }
         }
 
+        // Fallback detection for any ground below us
         Vector3 rayOrigin = transform.position + Vector3.up * 2f;
         RaycastHit fallbackHit;
         Debug.DrawRay(rayOrigin, Vector3.down * landingRayDistance, Color.red, 2f);
-        if (Physics.Raycast(rayOrigin, Vector3.down, out fallbackHit, landingRayDistance, climbableLayer))
+        if (Physics.Raycast(rayOrigin, Vector3.down, out fallbackHit, landingRayDistance))
         {
             Vector3 landingPos = fallbackHit.point;
             landingPos.y += (playerCollider != null ? playerCollider.bounds.extents.y : 0f) + landingOffset;
@@ -186,7 +277,7 @@ public class ClimbingBehaviour : MonoBehaviour
             return;
         }
 
-        Debug.LogWarning("No top surface detected; reverting to original position.");
+        Debug.LogWarning("No landing surface detected; reverting to original position.");
         transform.position = originalPosition;
     }
 
@@ -205,6 +296,17 @@ public class ClimbingBehaviour : MonoBehaviour
                 animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
                 animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandTarget.position);
                 animator.SetIKRotation(AvatarIKGoal.RightHand, rightHandTarget.rotation);
+
+                // You can add foot IK positioning here as well if needed
+                // animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 1f);
+                // animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 1f);
+                // animator.SetIKPosition(AvatarIKGoal.LeftFoot, leftFootTarget.position);
+                // animator.SetIKRotation(AvatarIKGoal.LeftFoot, leftFootTarget.rotation);
+                
+                // animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 1f);
+                // animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, 1f);
+                // animator.SetIKPosition(AvatarIKGoal.RightFoot, rightFootTarget.position);
+                // animator.SetIKRotation(AvatarIKGoal.RightFoot, rightFootTarget.rotation);
             }
             else
             {
@@ -212,6 +314,11 @@ public class ClimbingBehaviour : MonoBehaviour
                 animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 0f);
                 animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0f);
                 animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0f);
+                // Reset foot IK if implemented
+                // animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 0f);
+                // animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 0f);
+                // animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 0f);
+                // animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, 0f);
             }
         }
     }
