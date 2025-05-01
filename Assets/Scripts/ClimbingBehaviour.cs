@@ -1,32 +1,36 @@
 using UnityEngine;
-using StarterAssets;  // Adjust if your ThirdPersonController is in a different namespace
+using StarterAssets;
 
 public class ClimbingBehaviour : MonoBehaviour
 {
-    public Animator animator;                // Reference to the Animator component
-    public Transform leftHandTarget;         // IK target for the left hand
-    public Transform rightHandTarget;        // IK target for the right hand
-    public Transform leftFootTarget;         // (Optional) IK target for the left foot
-    public Transform rightFootTarget;        // (Optional) IK target for the right foot
+    public Animator animator;
+    public Transform leftHandTarget;
+    public Transform rightHandTarget;
+    public Transform leftFootTarget;
+    public Transform rightFootTarget;
 
-    public float climbSpeed = 100f;           // Speed of climbing movement
-    public float detectionDistance = 10.0f;   // Distance for raycasting to detect surfaces
-    public float distanceFromWall = 0.5f;      // How far from the wall to position the player when climbing
-    public LayerMask climbableLayer;          // The layer that defines climbable surfaces
+    public float climbSpeed = 100f;
+    public float detectionDistance = 10.0f;
+    public float distanceFromWall = 0.5f;
+    public LayerMask climbableLayer;
+    [SerializeField] private LayerMask groundLayer;
 
-    // Toggle for top detection (set false to always allow upward movement for testing)
-    public bool useTopDetection = false;
+    public float landingRayDistance = 15f;
+    public float landingOffset = 0.1f;
     
-    // New variables to adjust landing behavior.
-    public float landingRayDistance = 15f;    // How far down to look for a landing spot
-    public float landingOffset = 0.1f;        // Extra offset to adjust landing height if necessary
+    // Add wider wall detection parameters
+    public float wallCheckWidth = 0.5f;
+    public int wallCheckRays = 3;
 
-    private bool isClimbing = false;          // Tracks if the player is currently climbing
-    private Vector3 originalPosition;         // Stores the player's position before climbing
-    private Vector3 wallNormal;               // Stores the normal of the wall surface
+    private bool isClimbing = false;
+    private Vector3 originalPosition;
+    private Vector3 wallNormal;
 
-    private Collider playerCollider;          // Reference to the player's collider
-    private ThirdPersonController thirdPersonController;  // Reference to the movement controller
+    private float climbingStartTime;
+    private float climbingGraceDuration = 0.2f;
+
+    private Collider playerCollider;
+    private ThirdPersonController thirdPersonController;
 
     void Start()
     {
@@ -49,22 +53,19 @@ public class ClimbingBehaviour : MonoBehaviour
         {
             HandleClimbing();
 
-            // Press E to exit climbing mode.x
             if (Input.GetKeyDown(KeyCode.G))
             {
-                Debug.Log("E key pressed: Ending climbing.");
+                Debug.Log("G key pressed: Ending climbing.");
                 EndClimbing();
             }
         }
         else
         {
-            // Press F to attempt to start climbing.
             if (Input.GetKeyDown(KeyCode.F))
             {
-                // Raycast from the left-hand target position.
                 RaycastHit hit;
                 Vector3 rayOrigin = leftHandTarget.position;
-                Vector3 rayDirection = transform.forward;  // Adjust if needed
+                Vector3 rayDirection = transform.forward;
 
                 Debug.DrawRay(rayOrigin, rayDirection * detectionDistance, Color.green);
 
@@ -81,114 +82,193 @@ public class ClimbingBehaviour : MonoBehaviour
         }
     }
 
-    // Called when the player starts climbing.
-    // This version repositions the player using the raycast hit but preserves the original Y value.
     void StartClimbing(Vector3 hitPoint, Vector3 hitNormal)
     {
         isClimbing = true;
+        climbingStartTime = Time.time;
         originalPosition = transform.position;
         wallNormal = hitNormal;
 
-        // Disable the player's collider to avoid collision interference.
         if (playerCollider != null)
         {
             playerCollider.enabled = false;
         }
 
-        // Set climbing flag in the ThirdPersonController (if applicable).
         if (thirdPersonController != null)
         {
             thirdPersonController.isClimbing = true;
         }
 
-        // Compute a new position:
-        // Position the player at the hit point plus an offset along the wall normal.
-        // Preserve the original Y value so that the climb starts at ground level.
         Vector3 newPosition = hitPoint + hitNormal * distanceFromWall;
         newPosition.y = originalPosition.y;
         transform.position = newPosition;
 
-        // Rotate the player to face the wall.
         transform.rotation = Quaternion.LookRotation(-hitNormal);
 
-        // Set the climbing animation state.
         animator.SetBool("IsClimbing", true);
         Debug.Log("Started climbing. New starting position: " + transform.position);
     }
 
-    // Handles climbing movement each frame.
+    bool IsWallInFront()
+    {
+        // Cast multiple rays to check for wall contact
+        float halfWidth = wallCheckWidth / 2f;
+        
+        // Start with center ray
+        Vector3 frontRayOrigin = transform.position - transform.forward * 0.3f;
+        RaycastHit centerHit;
+        bool centerHasContact = Physics.Raycast(frontRayOrigin, transform.forward, out centerHit, 1.0f, climbableLayer);
+        Debug.DrawRay(frontRayOrigin, transform.forward * 1.0f, centerHasContact ? Color.green : Color.red);
+        
+        if (centerHasContact)
+            return true;
+            
+        // Check additional rays to the sides
+        for (int i = 1; i <= wallCheckRays/2; i++)
+        {
+            float offset = (halfWidth * i) / (wallCheckRays/2);
+            
+            // Left check
+            Vector3 leftOrigin = frontRayOrigin + transform.right * -offset;
+            bool leftContact = Physics.Raycast(leftOrigin, transform.forward, 1.0f, climbableLayer);
+            Debug.DrawRay(leftOrigin, transform.forward * 1.0f, leftContact ? Color.green : Color.yellow);
+            
+            // Right check
+            Vector3 rightOrigin = frontRayOrigin + transform.right * offset;
+            bool rightContact = Physics.Raycast(rightOrigin, transform.forward, 1.0f, climbableLayer);
+            Debug.DrawRay(rightOrigin, transform.forward * 1.0f, rightContact ? Color.green : Color.yellow);
+            
+            if (leftContact || rightContact)
+                return true;
+        }
+        
+        // Also check from hand positions for better detection
+        bool leftHandContact = Physics.Raycast(leftHandTarget.position, transform.forward, 1.0f, climbableLayer);
+        bool rightHandContact = Physics.Raycast(rightHandTarget.position, transform.forward, 1.0f, climbableLayer);
+        
+        Debug.DrawRay(leftHandTarget.position, transform.forward * 1.0f, leftHandContact ? Color.green : Color.yellow);
+        Debug.DrawRay(rightHandTarget.position, transform.forward * 1.0f, rightHandContact ? Color.green : Color.yellow);
+        
+        return leftHandContact || rightHandContact;
+    }
+
     void HandleClimbing()
     {
-        // Get climbing input.
-        float climbInputVertical = Input.GetAxis("Vertical");    // Positive for up, negative for down.
-        float climbInputHorizontal = Input.GetAxis("Horizontal");  // Positive for right, negative for left.
+        float climbInputVertical = Input.GetAxis("Vertical");
+        float climbInputHorizontal = Input.GetAxis("Horizontal");
 
-        // Update animation parameters.
-        animator.SetFloat("ClimbDirection", climbInputVertical);
+        bool isTouchingClimbable = IsWallInFront();
 
-        // Optional top detection logic.
-        if (useTopDetection)
+        if (!isTouchingClimbable)
         {
-            Vector3 headPosition = transform.position + Vector3.up * 1.5f;
-            RaycastHit topHit;
-            bool hasSurfaceAbove = Physics.Raycast(headPosition, Vector3.up, out topHit, 0.5f, climbableLayer);
-            if (!hasSurfaceAbove && climbInputVertical > 0)
+            if (Time.time - climbingStartTime > climbingGraceDuration)
             {
-                Debug.Log("Top of climb reached. Stopping upward movement.");
+                Debug.Log("No wall in front. Stop climbing.");
+                EndClimbing();
+                return;
+            }
+        }
+
+        // Check for ceiling/obstacle above when climbing up
+        if (climbInputVertical > 0)
+        {
+            Vector3 headPosition = transform.position + Vector3.up * 1.8f;
+            RaycastHit ceilingHit;
+            if (Physics.Raycast(headPosition, Vector3.up, out ceilingHit, 0.5f))
+            {
+                Debug.Log("Obstacle above detected, limiting upward movement");
                 climbInputVertical = 0;
             }
         }
 
-        // Calculate movement vectors.
+        // Check for ground below when climbing down
+        RaycastHit downHit;
+        bool isHittingGround = Physics.Raycast(transform.position, Vector3.down, out downHit, 1.0f, groundLayer);
+        if (isHittingGround && climbInputVertical < 0)
+        {
+            Debug.Log("Cannot climb down into ground.");
+            climbInputVertical = 0;
+        }
+
+        animator.SetFloat("ClimbDirection", climbInputVertical);
+        animator.SetFloat("ClimbHorizontal", climbInputHorizontal);
+
         Vector3 upwardMovement = Vector3.up * climbInputVertical * climbSpeed * Time.deltaTime;
         Vector3 horizontalMovement = transform.right * climbInputHorizontal * climbSpeed * Time.deltaTime;
         Vector3 climbMovement = upwardMovement + horizontalMovement;
 
-        // Apply the climbing movement.
         transform.position += climbMovement;
-        Debug.Log("Climbing. New position: " + transform.position);
+        
+        // After moving, check if we need to adjust distance from the wall
+        if (isTouchingClimbable)
+        {
+            RaycastHit wallHit;
+            if (Physics.Raycast(transform.position, transform.forward, out wallHit, 1.0f, climbableLayer))
+            {
+                // Adjust position to maintain proper distance from wall
+                float currentDistance = Vector3.Distance(transform.position, wallHit.point);
+                if (Mathf.Abs(currentDistance - distanceFromWall) > 0.1f)
+                {
+                    Vector3 adjustedPosition = wallHit.point + wallHit.normal * distanceFromWall;
+                    adjustedPosition.y = transform.position.y; // Keep the same height
+                    transform.position = Vector3.Lerp(transform.position, adjustedPosition, 0.5f);
+                }
+                
+                // Update wall normal if it changed significantly
+                if (Vector3.Angle(wallNormal, wallHit.normal) > 15f)
+                {
+                    wallNormal = wallHit.normal;
+                    transform.rotation = Quaternion.Lerp(transform.rotation, 
+                                                         Quaternion.LookRotation(-wallHit.normal),
+                                                         0.5f);
+                }
+            }
+        }
     }
 
-    // Revised EndClimbing method to better detect rooftop landing.
     void EndClimbing()
     {
         isClimbing = false;
         animator.SetBool("IsClimbing", false);
 
-        // Re-enable the player's collider before landing.
         if (playerCollider != null)
             playerCollider.enabled = true;
 
         if (thirdPersonController != null)
             thirdPersonController.isClimbing = false;
 
-        // --- Attempt A: Look upward for a nearly horizontal roof ---
+        // Try to detect if we're at the top of a climbable surface
         RaycastHit upwardHit;
-        float upwardRayDistance = 10f; // Adjust as needed
+        float upwardRayDistance = 2f;
         bool roofDetected = Physics.Raycast(transform.position, Vector3.up, out upwardHit, upwardRayDistance, climbableLayer);
 
         if (roofDetected && Vector3.Dot(upwardHit.normal, Vector3.up) > 0.9f)
         {
-            // Found a nearly flat roof.
-            Vector3 roofPoint = upwardHit.point;
-            // Now cast a downward ray from a little above the detected roof.
-            Vector3 downwardOrigin = roofPoint + Vector3.up * 1f;
-            RaycastHit downwardHit;
-            if (Physics.Raycast(downwardOrigin, Vector3.down, out downwardHit, upwardRayDistance + 1f, climbableLayer))
+            // Try multiple forward positions to find a suitable landing spot
+            for (float forwardOffset = 0.5f; forwardOffset <= 2.0f; forwardOffset += 0.5f)
             {
-                Vector3 landingPos = downwardHit.point;
-                landingPos.y += (playerCollider != null ? playerCollider.bounds.extents.y : 0f) + landingOffset;
-                transform.position = landingPos;
-                Debug.Log("Landed on roof at: " + landingPos);
-                return;
+                Vector3 topPosition = upwardHit.point + transform.forward * forwardOffset;
+                Vector3 downwardOrigin = topPosition + Vector3.up * 1f;
+                
+                RaycastHit downwardHit;
+                Debug.DrawRay(downwardOrigin, Vector3.down * (upwardRayDistance + 1f), Color.blue, 2f);
+                
+                if (Physics.Raycast(downwardOrigin, Vector3.down, out downwardHit, upwardRayDistance + 1f))
+                {
+                    Vector3 landingPos = downwardHit.point;
+                    landingPos.y += (playerCollider != null ? playerCollider.bounds.extents.y : 0f) + landingOffset;
+                    transform.position = landingPos;
+                    Debug.Log("Landed on top surface at: " + landingPos);
+                    return;
+                }
             }
         }
 
-        // --- Attempt B: Fallback downward raycast from above the player ---
-        Vector3 rayOrigin = transform.position + Vector3.up * 2f; // Start higher than current position.
+        // Fallback detection for any ground below us
+        Vector3 rayOrigin = transform.position + Vector3.up * 2f;
         RaycastHit fallbackHit;
         Debug.DrawRay(rayOrigin, Vector3.down * landingRayDistance, Color.red, 2f);
-        if (Physics.Raycast(rayOrigin, Vector3.down, out fallbackHit, landingRayDistance, climbableLayer))
+        if (Physics.Raycast(rayOrigin, Vector3.down, out fallbackHit, landingRayDistance))
         {
             Vector3 landingPos = fallbackHit.point;
             landingPos.y += (playerCollider != null ? playerCollider.bounds.extents.y : 0f) + landingOffset;
@@ -196,37 +276,49 @@ public class ClimbingBehaviour : MonoBehaviour
             Debug.Log("Landed on surface at: " + landingPos);
             return;
         }
-        
-        Debug.LogWarning("No top surface detected; reverting to original position.");
+
+        Debug.LogWarning("No landing surface detected; reverting to original position.");
         transform.position = originalPosition;
     }
 
-    // Called after the Animator finishes its evaluation; applies IK to the hands.
     void OnAnimatorIK(int layerIndex)
     {
         if (animator)
         {
             if (isClimbing)
             {
-                // Left Hand IK setup.
                 animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
                 animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1f);
                 animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandTarget.position);
                 animator.SetIKRotation(AvatarIKGoal.LeftHand, leftHandTarget.rotation);
 
-                // Right Hand IK setup.
                 animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
                 animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
                 animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandTarget.position);
                 animator.SetIKRotation(AvatarIKGoal.RightHand, rightHandTarget.rotation);
+
+                // You can add foot IK positioning here as well if needed
+                // animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 1f);
+                // animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 1f);
+                // animator.SetIKPosition(AvatarIKGoal.LeftFoot, leftFootTarget.position);
+                // animator.SetIKRotation(AvatarIKGoal.LeftFoot, leftFootTarget.rotation);
+                
+                // animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 1f);
+                // animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, 1f);
+                // animator.SetIKPosition(AvatarIKGoal.RightFoot, rightFootTarget.position);
+                // animator.SetIKRotation(AvatarIKGoal.RightFoot, rightFootTarget.rotation);
             }
             else
             {
-                // Reset IK weights when not climbing.
                 animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 0f);
                 animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 0f);
                 animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0f);
                 animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0f);
+                // Reset foot IK if implemented
+                // animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 0f);
+                // animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 0f);
+                // animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 0f);
+                // animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, 0f);
             }
         }
     }
