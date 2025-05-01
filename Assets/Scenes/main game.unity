@@ -10022,15 +10022,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 490576248761790154, guid: c708a3b79cd542b42bbfedb17e213bc1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 183.8
+      value: -194.5
       objectReference: {fileID: 0}
     - target: {fileID: 490576248761790154, guid: c708a3b79cd542b42bbfedb17e213bc1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -22.6
+      value: -35.6
       objectReference: {fileID: 0}
     - target: {fileID: 490576248761790154, guid: c708a3b79cd542b42bbfedb17e213bc1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -151.26
+      value: -23.2
       objectReference: {fileID: 0}
     - target: {fileID: 974238578668270714, guid: c708a3b79cd542b42bbfedb17e213bc1, type: 3}
       propertyPath: m_Height
@@ -10086,15 +10086,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3203261902030644824, guid: c708a3b79cd542b42bbfedb17e213bc1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 184
+      value: -194.29999
       objectReference: {fileID: 0}
     - target: {fileID: 3203261902030644824, guid: c708a3b79cd542b42bbfedb17e213bc1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -21.224998
+      value: -34.225
       objectReference: {fileID: 0}
     - target: {fileID: 3203261902030644824, guid: c708a3b79cd542b42bbfedb17e213bc1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -155.26001
+      value: -27.200012
       objectReference: {fileID: 0}
     - target: {fileID: 3203261902030644825, guid: c708a3b79cd542b42bbfedb17e213bc1, type: 3}
       propertyPath: Priority.Enabled
@@ -10118,15 +10118,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5542111180780342647, guid: c708a3b79cd542b42bbfedb17e213bc1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 184
+      value: -194.29999
       objectReference: {fileID: 0}
     - target: {fileID: 5542111180780342647, guid: c708a3b79cd542b42bbfedb17e213bc1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -21.224998
+      value: -34.225
       objectReference: {fileID: 0}
     - target: {fileID: 5542111180780342647, guid: c708a3b79cd542b42bbfedb17e213bc1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -155.26001
+      value: -27.200012
       objectReference: {fileID: 0}
     - target: {fileID: 5652873349145963754, guid: c708a3b79cd542b42bbfedb17e213bc1, type: 3}
       propertyPath: messageText
@@ -12674,6 +12674,10 @@ PrefabInstance:
     - target: {fileID: 2920085614641163072, guid: 8a355f92415e9414f8687229414506b7, type: 3}
       propertyPath: m_Name
       value: Building 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2920085614641163072, guid: 8a355f92415e9414f8687229414506b7, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3712872736725764757, guid: 8a355f92415e9414f8687229414506b7, type: 3}
       propertyPath: 'm_Materials.Array.data[4]'
@@ -25022,13 +25026,15 @@ MonoBehaviour:
   rightHandTarget: {fileID: 1634178924}
   leftFootTarget: {fileID: 786665004}
   rightFootTarget: {fileID: 501138661}
-  climbSpeed: 2
-  detectionDistance: 5
+  climbSpeed: 10
+  detectionDistance: 10
   distanceFromWall: 0.5
   climbableLayer:
     serializedVersion: 2
     m_Bits: 64
-  useTopDetection: 0
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 1
   landingRayDistance: 15
   landingOffset: 0.1
 --- !u!95 &1395887620 stripped
