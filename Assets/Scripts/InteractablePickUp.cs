@@ -5,26 +5,34 @@ using UnityEngine;
 public class InteractablePickUp : BaseInteractable
 {
     [Header("Item Data")]
-    [SerializeField] private string  itemName;
-    [SerializeField] private int     quantity;
-    [SerializeField] private Sprite  sprite;
+    [SerializeField] private string itemName;
+    [SerializeField] private int quantity;
+    [SerializeField] private Sprite sprite;
     [TextArea(3, 5)]
     [SerializeField] private string itemDescription;
 
+    [Header("Quest Flags")]
+    [SerializeField] private bool isBook = false;
+
     [Header("Behavior")]
     [Tooltip("If true, this pickup adds wisps (currency) instead of a normal item")]
-    [SerializeField] private bool    isCurrencyPickup = false;
+    [SerializeField] private bool isCurrencyPickup = false;
+
+    [SerializeField] private GameObject crownPrefab;       // Crown asset to attach
+    [SerializeField] private Transform headTransform;      // Character's head transform
 
     [Header("Message")]
     [TextArea(3, 5)]
-    [SerializeField] private string  _messageText;
+    [SerializeField] private string _messageText;
+
+    [Header("Sound Effect")]
+    [SerializeField] private AudioClip pickupSound; // <--- Add this in Inspector
 
     private InventoryManager inventoryManager;
 
     protected override void Start()
     {
         base.Start();
-        // cache your InventoryManager once
         inventoryManager = FindObjectOfType<InventoryManager>();
         if (inventoryManager == null)
             Debug.LogWarning("InteractablePickUp: InventoryManager not found");
@@ -33,26 +41,30 @@ public class InteractablePickUp : BaseInteractable
     public override bool Interact(Interactor interactor)
     {
         Debug.Log("Interact() called on " + gameObject.name);
-        // 1) Always add the item to the grid
+
         inventoryManager.AddItem(itemName, quantity, sprite, itemDescription);
 
         if (isCurrencyPickup)
         {
-            // 2) Immediately re-sync your wisp balance from the inventory slots
             inventoryManager.SyncCurrencyFromInventory(itemName);
-
-            // 3) Show exactly how many wisps you now have
-            uiManager?.ShowMessage(
-                $"You picked up {quantity} wisps! " +
-                $" Total Wisps: {inventoryManager.WispCurrency}"
-            );
+            uiManager?.ShowMessage($"You picked up {quantity} wisps! Total Wisps: {inventoryManager.WispCurrency}");
         }
         else
         {
             uiManager?.ShowMessage(_messageText);
         }
 
-        // 4) Finally destroy the world object
+        if (isBook && BookTracker.Instance != null)
+        {
+            BookTracker.Instance.BookCollected();
+        }
+
+        // 🔊 Play pickup sound at the item's position
+        if (pickupSound != null)
+        {
+            AudioSource.PlayClipAtPoint(pickupSound, transform.position);
+        }
+
         Destroy(gameObject);
         return true;
     }
